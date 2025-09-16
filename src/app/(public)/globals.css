@@ -132,15 +132,9 @@
   --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
   --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
 
-
-  /* brat */
-  --color-primary: #1c4e87;
-  --color-secondary: #ff6f00;
-
-
-  /* dev */
-  /* --color-primary: #ff6f00;
---color-secondary: #1c4e87; */
+  /* Theme Color */
+  --color-primary: #ff6f00;
+  --color-secondary: #1c4e87;
 
 }
 

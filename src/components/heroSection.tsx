@@ -3,12 +3,8 @@ import Image from "next/image";
 export default function HeroSection() {
   return (
 
-    // <section className="container m-auto bg-primary text-white py-20 px-8  " style={{
-    //   background: "radial-gradient(circle at 60% center, var(--color-primary) 5%, var(--color-primary) 100%) ",
-
-    <section className="container m-auto bg-[#1c4e87] text-white py-6 px-8  " style={{
-      background: "radial-gradient(circle at 60% center, #6aa5ea 5%, #1c4e87 100%) ",
-
+    <section className="container m-auto bg-primary text-white py-20 px-8  " style={{
+      background: "radial-gradient(circle at 60% center, var(--color-primary) 5%, var(--color-primary) 100%) ",
     }}>
       <div className="max-w-7xl container m-auto flex flex-col md:flex-row items-center justify-between gap-10">
         {/* Left Content */}
@@ -30,10 +26,10 @@ export default function HeroSection() {
         {/* Right Image */}
         <div className="md:w-1/2 flex justify-center">
           <Image
-            src={'/headphone.png'} 
+            src={'/headphone.png'}
             alt="Headphones"
-            width={400} 
-            height={400} 
+            width={400}
+            height={400}
             className="w-[300px] md:w-[350px] object-contain"
           />
         </div>
