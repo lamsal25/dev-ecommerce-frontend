@@ -159,12 +159,12 @@ export async function Navigation() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        {user && user.role === 'user' && (
+        {/* {user && user.role === 'user' && ( */}
           <div className=" flex gap-4 w-4 h-4 mr-8">
             <Link href={'/cart'}> <BsCart4 /></Link>
             <Link href={'/wishlist'}> <FaRegHeart /> </Link>
           </div>
-        )}
+        {/* )} */}
 
         {/* Search */}
         <div className="flex items-center gap-x-6">

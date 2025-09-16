@@ -175,7 +175,7 @@ export default function CartPage() {
                         </div>
                         <span>{item.product.name}</span>
                       </div>
-                      <div className="text-center">Rs. {item.price}</div>
+                      <div className="text-center">Rs. { (item.price).toFixed(2)}</div>
 
                       <div className="flex justify-center">
                         <div className="border border-gray-300 rounded flex items-center">
@@ -236,11 +236,11 @@ export default function CartPage() {
                 <h2 className="text-xl font-bold mb-6">Cart Total</h2>
                 <div className="flex justify-between py-3 border-b border-gray-200">
                   <span>Subtotal:</span>
-                  <span className="font-medium">Rs. {totalCartPrice}</span>
+                  <span className="font-medium">Rs. {totalCartPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between py-3 font-bold">
                   <span>Total:</span>
-                  Rs. {totalCartPrice}
+                  Rs. {totalCartPrice.toFixed(2)}
                 </div>
 
                 <button
