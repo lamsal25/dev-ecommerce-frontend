@@ -116,14 +116,6 @@ export async function Navigation() {
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <Link href="/marketplace" legacyBehavior passHref>
-                <NavigationMenuLink className="px-3 py-2 text-gray-800 text-base font-medium hover:text-primary hover:bg-gray-50 rounded-md transition-all duration-200">
-                  Marketplace
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
               <Link href="/aboutUs" legacyBehavior passHref>
                 <NavigationMenuLink className="px-3 py-2 text-gray-800 text-base font-medium hover:text-primary hover:bg-gray-50 rounded-md transition-all duration-200">
                   About

@@ -4,9 +4,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError } from "axios";
 import { Delete } from "lucide-react";
-import "react-toastify/dist/ReactToastify.css";
 import API from "@/lib/api";
 import LoadingSpinner from "@/components/loadingSpinner";
 import { toast } from "react-toastify";
@@ -16,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 export default function CartPage() {
   const route = useRouter();
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
@@ -40,13 +39,10 @@ export default function CartPage() {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       if (response.status === 200) {
         setCartItems(response.data.data);
-        console.log(response.data.data);
       }
     } catch (err) {
       console.error("Error fetching cart:", err);
@@ -71,61 +67,39 @@ export default function CartPage() {
     }
   };
 
-
   const increaseQuantity = async (
     id: number,
     quantity: number,
-    type: string,
     size?: string
   ) => {
-    if (type === "marketplace") return;
-
     try {
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/`,
-        { productID: id, quantity: quantity + 1, overide_quantity: true, size: size },
+        { productID: id, quantity: quantity + 1, overide_quantity: true, size },
         { withCredentials: true }
       );
-
-      getCart(); // Only called if success (status 200/201)
-
+      getCart();
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
-
-      const status = err.response?.status;
       const backendError = err.response?.data?.error;
-
-      if (status === 400) {
-        toast.error(backendError || "Bad Request", {
-          position: "top-right",
-          autoClose: 2000,
-          theme: "light",
-        });
-        // alert(backendError || "Bad Request");
-      } else {
-        toast.error(backendError || "Something went wrong", {
-          position: "top-right",
-          autoClose: 2000,
-          theme: "light",
-        });
-        // alert(backendError || "Something went wrong");
-      }
+      toast.error(backendError || "Something went wrong", {
+        position: "top-right",
+        autoClose: 2000,
+        theme: "light",
+      });
     }
   };
-
 
   const decreaseQuantity = async (
     id: number,
     quantity: number,
-    type: string,
     size?: string
   ) => {
-    if (type === "marketplace") return; // Prevent decreasing marketplace quantity
     const newQty = Math.max(1, quantity - 1);
     try {
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/`,
-        { productID: id, quantity: newQty, overide_quantity: true, size: size },
+        { productID: id, quantity: newQty, overide_quantity: true, size },
         { withCredentials: true }
       );
       getCart();
@@ -205,49 +179,40 @@ export default function CartPage() {
 
                       <div className="flex justify-center">
                         <div className="border border-gray-300 rounded flex items-center">
-                          {item.product.product_type !== "marketplace" ? (
-                            <>
-                              <input
-                                type="text"
-                                value={item.quantity}
-                                readOnly
-                                className="w-10 text-center p-1"
-                              />
-                              <div className="flex flex-col">
-                                <button
-                                  onClick={() =>
-                                    increaseQuantity(
-                                      item.product.id,
-                                      item.quantity,
-                                      item.product.product_type,
-                                      item.selected_size
-                                    )
-                                  }
-                                  className="px-2 text-gray-500 hover:bg-gray-100 border-l border-b border-gray-300"
-                                >
-                                  ▲
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    decreaseQuantity(
-                                      item.product.id,
-                                      item.quantity,
-                                      item.product.product_type,
-                                      item.selected_size
-                                    )
-                                  }
-                                  className="px-2 text-gray-500 hover:bg-gray-100 border-l border-gray-300"
-                                >
-                                  ▼
-                                </button>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="flex items-center px-3 text-gray-500">
-                              Qty: {item.quantity}{" "}
-                              <span className="ml-1 text-xs">(fixed)</span>
+                          <>
+                            <input
+                              type="text"
+                              value={item.quantity}
+                              readOnly
+                              className="w-10 text-center p-1"
+                            />
+                            <div className="flex flex-col">
+                              <button
+                                onClick={() =>
+                                  increaseQuantity(
+                                    item.product.id,
+                                    item.quantity,
+                                    item.selected_size
+                                  )
+                                }
+                                className="px-2 text-gray-500 hover:bg-gray-100 border-l border-b border-gray-300"
+                              >
+                                ▲
+                              </button>
+                              <button
+                                onClick={() =>
+                                  decreaseQuantity(
+                                    item.product.id,
+                                    item.quantity,
+                                    item.selected_size
+                                  )
+                                }
+                                className="px-2 text-gray-500 hover:bg-gray-100 border-l border-gray-300"
+                              >
+                                ▼
+                              </button>
                             </div>
-                          )}
+                          </>
                         </div>
                       </div>
                     </div>
@@ -258,7 +223,7 @@ export default function CartPage() {
               </div>
 
               <div className="mt-6 ">
-                <Link href={'/wishlist'}>
+                <Link href={"/wishlist"}>
                   <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 hover:cursor-pointer rounded">
                     Return to wishlist
                   </button>

@@ -1,7 +1,6 @@
 "use server";
 import API from "@/lib/api";
 import { ActionResponse } from ".";
-import axios from "axios";
 import { revalidatePath } from "next/cache";
 
 // create products //
@@ -118,21 +117,6 @@ export async function getProductsByCategory(categoryId: number): Promise<any> {
 }
 
 
-// Get marketplace products by category //
-export async function getApprovedMarketplaceProductsByCategory(
-  categoryId: number
-): Promise<any> {
-  try {
-    const response = await API.get(
-      `/products/getApprovedMarketplaceProducts/${categoryId}`
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Failed to fetch products by category", error);
-    return null;
-  }
-}
-
 //get search products //
 export async function getSearchProducts(
   query: string
@@ -150,66 +134,6 @@ export async function getSearchProducts(
       return { data: null, error: "An error occurred", status: 400 };
     }
     return { data: null, error: "An error occurred" };
-  }
-}
-
-export async function getMarketPlaceProductByUser(): Promise<any> {
-  try {
-    const response = await API.get(`/products/getMarketplaceProductsByUser/`);
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch products by category", error);
-    return null;
-  }
-}
-
-export async function deleteMarketPlaceProduct(id: any): Promise<any> {
-  try {
-    const response =
-      await API.delete(`/products/deleteMarketplaceProducts/${id}/
-      
-      `);
-    revalidatePath("/clientdashboard/marketplaceproduct");
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch products by category", error);
-    return null;
-  }
-}
-
-export async function updateMarketPlaceProduct(
-  id: any,
-  values: any
-): Promise<any> {
-  try {
-    const response = await API.put(
-      `/products/updateMarketplaceProduct/${id}/`,
-      values,
-      {}
-    );
-    revalidatePath("/clientdashboard/marketplaceproduct");
-
-    return {
-      data: response.data,
-      msg: "Created Succesfully",
-      error: null,
-      status: 200,
-    };
-  } catch (error: any) {
-    if (error.response.status == 400) {
-      return { data: null, error: "An error occured", status: 400 };
-    }
-    return { data: null, error: "An error occured" };
-  }
-}
-
-export async function getMarketplaceProductsById(id: string): Promise<any> {
-  try {
-    const response = await API.get(`/products/getMarketplaceProductById/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch products by category", error);
-    return null;
   }
 }
 
@@ -235,7 +159,7 @@ export async function getProductsByVendor(): Promise<ActionResponse<any>> {
     };
   }
 }
-export async function getProductsByVendorId(vendorId:any): Promise<ActionResponse<any>> {
+export async function getProductsByVendorId(vendorId: any): Promise<ActionResponse<any>> {
   try {
     const response = await API.get(`/products/getProductsByVendorId/${vendorId}/`, {});
     return {
@@ -246,17 +170,17 @@ export async function getProductsByVendorId(vendorId:any): Promise<ActionRespons
     };
   } catch (error: any) {
     if (error.response && error.response.status === 404) {
-      return { 
-        data: null, 
-        error: error.response.data.message || "Vendor not found or no products available", 
-        status: 404 
+      return {
+        data: null,
+        error: error.response.data.message || "Vendor not found or no products available",
+        status: 404
       };
     }
     if (error.response && error.response.status === 400) {
-      return { 
-        data: null, 
-        error: "Bad request", 
-        status: 400 
+      return {
+        data: null,
+        error: "Bad request",
+        status: 400
       };
     }
     console.error("Unexpected error:", error);
@@ -265,30 +189,5 @@ export async function getProductsByVendorId(vendorId:any): Promise<ActionRespons
       error: "An error occurred while fetching products",
       status: error?.response?.status || 500,
     };
-  }
-}
-// Get marketplace products by category //
-export async function getUnApprovedMarketplaceProducts(): Promise<any> {
-  try {
-    const response = await API.get(
-      `/products/getUnapprovedMarketplaceProducts`
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch products by category", error);
-    return null;
-  }
-}
-
-export async function approveMarketPlace(id: string): Promise<any> {
-  try {
-    const response = await API.put(
-      `/products/approveMarketplaceProduct/${id}/`
-    );
-    revalidatePath("/superadmindashboard/pendingmarketplaceproducts");
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch products by category", error);
-    return null;
   }
 }

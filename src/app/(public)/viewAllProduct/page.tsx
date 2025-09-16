@@ -51,6 +51,10 @@ export default function AllProductsPage() {
     },
     sizes: product.sizes ?? [],
     slug: product.slug,
+    vendor: product.vendor ?? {
+      id: 0,
+      name: "Unknown Vendor",
+    },
   });
 
   const fetchProducts = async () => {
@@ -204,8 +208,8 @@ export default function AllProductsPage() {
                     <button
                       onClick={() => setViewMode("grid")}
                       className={`px-3 py-2 text-sm ${viewMode === "grid"
-                          ? "bg-primary text-white"
-                          : "bg-gray-100 text-gray-600"
+                        ? "bg-primary text-white"
+                        : "bg-gray-100 text-gray-600"
                         }`}
                     >
                       Grid
@@ -213,8 +217,8 @@ export default function AllProductsPage() {
                     <button
                       onClick={() => setViewMode("list")}
                       className={`px-3 py-2 text-sm ${viewMode === "list"
-                          ? "bg-primary text-white"
-                          : "bg-gray-100 text-gray-600"
+                        ? "bg-primary text-white"
+                        : "bg-gray-100 text-gray-600"
                         }`}
                     >
                       List

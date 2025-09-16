@@ -228,7 +228,7 @@ export function UserAvatarMenu() {
                     : userData?.role === 'vendor'
                       ? '/vendorDashboard/vendorDashboardProfile'
                       : userData?.role === 'superadmin'
-                        ? '/superadmindashboard/profile'
+                        ? '/superadmindashboard'
                         : '/profile';
                   router.push(profileRoute);
                 }}
