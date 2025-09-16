@@ -3,8 +3,9 @@ import Image from "next/image";
 export default function HeroSection() {
   return (
 
-    <section className="container m-auto bg-primary text-white py-20 px-8  " style={{
+    <section className="container m-auto bg-primary text-white py-6 px-8  " style={{
       background: "radial-gradient(circle at 60% center, var(--color-primary) 5%, var(--color-primary) 100%) ",
+
     }}>
       <div className="max-w-7xl container m-auto flex flex-col md:flex-row items-center justify-between gap-10">
         {/* Left Content */}

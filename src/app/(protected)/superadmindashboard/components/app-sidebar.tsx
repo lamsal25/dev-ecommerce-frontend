@@ -1,4 +1,4 @@
-import { BookAIcon, Calendar, Home, Inbox, Search, Settings} from "lucide-react"
+import { BookAIcon, Calendar, Home, Inbox, Search, Settings } from "lucide-react"
 
 import {
   Sidebar,
@@ -41,11 +41,11 @@ const items = [
     icon: BookAIcon,
   },
 
-    {
-      title: "FAQ",
-      url: "/superadmindashboard/faqForm",
-      icon: Search,
-    },
+  {
+    title: "FAQ",
+    url: "/superadmindashboard/faqForm",
+    icon: Search,
+  },
   //   {
   //     title: "Settings",
   //     url: "#",
@@ -61,12 +61,7 @@ const items = [
     url: "/superadmindashboard/activeAds",
     icon: Calendar,
   },
-  {
-    title: "Pending Marketplace Products",
-    url: "/superadmindashboard/pendingmarketplaceproducts",
-    icon: Settings,
-  },
- ]
+]
 
 export function AppSidebar() {
   return (
