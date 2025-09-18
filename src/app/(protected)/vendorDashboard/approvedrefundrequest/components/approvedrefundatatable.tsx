@@ -6,11 +6,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
-
-
-
 import {
   Table,
   TableBody,
@@ -19,45 +14,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-
-import { MoreHorizontal } from "lucide-react";
-
-
-
 
 export function ApprovedRefundsDataTable({
   data,
-}:{
-  data:any
-} ) {
+}: {
+  data: any[]
+}) {
+  // filter out null/undefined rows
+  const safeData = (data ?? []).filter((row) => row != null);
 
-const columns: ColumnDef<any>[] = [
-     
-      {
-        accessorKey: "order",
-        header: "Order ID",
-      },
-      {
-        accessorKey: "reason",
-        header: "Reason",
-      },
-      {
-        accessorKey: "status",
-        header: "Status",
-      },
-      {
-        accessorKey: "user.email",
-        header: "User Email",
-      },
-  
-     
-    ]
-  
-  
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorFn: (row) => row?.order ?? "N/A",
+      id: "order",
+      header: "Order ID",
+    },
+    {
+      accessorFn: (row) => row?.reason ?? "N/A",
+      id: "reason",
+      header: "Reason",
+    },
+    {
+      accessorFn: (row) => row?.status ?? "N/A",
+      id: "status",
+      header: "Status",
+    },
+    {
+      accessorFn: (row) => row?.user?.email ?? "N/A",
+      id: "userEmail",
+      header: "User Email",
+    },
+  ];
 
   const table = useReactTable({
-    data,
+    data: safeData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -68,18 +58,16 @@ const columns: ColumnDef<any>[] = [
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
         </TableHeader>

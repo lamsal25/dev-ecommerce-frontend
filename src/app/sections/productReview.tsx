@@ -51,7 +51,7 @@ export default function ProductReview({
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [visibleReviews, setVisibleReviews] = useState<Review[]>([]);
-  
+
   // Separate loading states for different operations
   const [replyLoading, setReplyLoading] = useState<Record<number, boolean>>({});
   const [updateLoading, setUpdateLoading] = useState<Record<number, boolean>>({});
@@ -67,6 +67,7 @@ export default function ProductReview({
       setError("");
       try {
         const { data, error: fetchError } = await getProductReviews(productId);
+        console.log("Fetched reviews:", data);
         if (fetchError) {
           setError(fetchError);
         } else {
@@ -191,11 +192,11 @@ export default function ProductReview({
       toast.error("Please enter a reply message");
       return;
     }
-    
+
     setReplyLoading({ ...replyLoading, [reviewId]: true });
     try {
       const res = await createVendorReply(reviewId, replyText);
-      
+      console.log("Reply response:", res);
       if (res.error) {
         // Handle forbidden/invalid request errors
         if (res.error.includes('403') || res.error.includes('forbidden') || res.error.includes('not authorized')) {
@@ -223,11 +224,11 @@ export default function ProductReview({
       toast.error("Please enter a reply message");
       return;
     }
-    
+
     setUpdateLoading({ ...updateLoading, [reviewId]: true });
     try {
       const res = await updateVendorReply(replyId, replyText);
-      
+
       if (res.error) {
         // Handle forbidden/invalid request errors
         if (res.error.includes('403') || res.error.includes('forbidden') || res.error.includes('not authorized')) {
@@ -253,7 +254,7 @@ export default function ProductReview({
     setDeleteReplyLoading({ ...deleteReplyLoading, [reviewId]: true });
     try {
       const res = await deleteVendorReply(replyId);
-      
+
       if (res.error) {
         // Handle forbidden/invalid request errors
         if (res.error.includes('403') || res.error.includes('forbidden') || res.error.includes('not authorized')) {
@@ -448,11 +449,10 @@ export default function ProductReview({
                     key={star}
                     type="button"
                     onClick={() => setRating(star)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                      star <= rating
-                        ? "bg-yellow-100 text-yellow-500"
-                        : "bg-white text-gray-400 hover:bg-gray-100"
-                    }`}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${star <= rating
+                      ? "bg-yellow-100 text-yellow-500"
+                      : "bg-white text-gray-400 hover:bg-gray-100"
+                      }`}
                     aria-label={`Rate ${star} star${star !== 1 ? "s" : ""}`}
                   >
                     <Star className="w-5 h-5" />
@@ -476,8 +476,8 @@ export default function ProductReview({
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="w-full bg-primary hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
               disabled={loading}
             >

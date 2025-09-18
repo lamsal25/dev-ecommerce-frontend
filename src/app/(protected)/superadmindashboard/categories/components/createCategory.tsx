@@ -63,14 +63,14 @@ export default function CreateCategory() {
         const fetchCategories = async () => {
             try {
                 const res = await getActiveCategories();
-                setCategories(res.data);
+                setCategories(Array.isArray(res?.data) ? res.data : []); // ✅ always array
             } catch (error) {
                 console.error("Error fetching categories", error);
+                setCategories([]); // ✅ fallback to empty
             }
         };
         fetchCategories();
     }, []);
-
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -91,45 +91,38 @@ export default function CreateCategory() {
 
             const response = await API.post(`/products/createCategory/`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                    "Content-Type": "multipart/form-data",
+                },
             });
- 
+
             if (response.status === 201 || response.status === 200) {
-                if (response.status === 200 || response.status === 201) {
-                    toast.success("Category created successfully!", {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        theme: "light",
-                    });
-                    form.reset();
-                    setImage(null);
-                    setImagePreview(null);
-                    setIsOpen(false);
-                } else {
-                    toast.error("Failed to create Category", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        theme: "light",
-                    });
-                } form.reset();
+                toast.success("Category created successfully!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "light",
+                });
+                form.reset();
                 setImage(null);
                 setImagePreview(null);
                 setIsOpen(false);
             } else {
-                alert(response.data.message);
+                toast.error("Failed to create Category", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "light",
+                });
             }
         } catch (error) {
             console.error("Error creating category", error);
-            alert(error);
+            alert("Error creating category");
         }
     };
 
@@ -182,11 +175,17 @@ export default function CreateCategory() {
                                             <SelectValue placeholder="None (Top-level)" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {categories.map((cat) => (
-                                                <SelectItem key={cat.id} value={String(cat.id)}>
-                                                    {cat.name}
-                                                </SelectItem>
-                                            ))}
+                                            {categories.length > 0 ? (
+                                                categories.map((cat) => (
+                                                    <SelectItem key={cat.id} value={String(cat.id)}>
+                                                        {cat.name}
+                                                    </SelectItem>
+                                                ))
+                                            ) : (
+                                                <span className="text-gray-500 px-2 py-1 text-sm">
+                                                    No categories available
+                                                </span>
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </FormItem>

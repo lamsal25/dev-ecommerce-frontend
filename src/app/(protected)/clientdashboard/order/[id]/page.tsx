@@ -63,6 +63,7 @@ const OrderDetail = () => {
       setLoading(true);
       const response = await fetchOrderDetails(orderID);
       setOrder(response.data);
+      console.log(response.data)
     } catch (error) {
       toast.error("Failed to fetch order details");
       console.error("Error fetching order:", error);

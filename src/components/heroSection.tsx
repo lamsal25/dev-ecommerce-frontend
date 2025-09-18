@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -19,9 +20,11 @@ export default function HeroSection() {
           <p className="text-lg text-gray-200 mb-8">
             We have prepared special discounts for you
           </p>
-          <button className="bg-secondary hover:bg-orange-600 hover:cursor-pointer text-white font-semibold px-6 py-3 rounded">
-            Buy Now!
-          </button>
+          <Link href="/viewAllProduct">
+            <button className="bg-secondary hover:bg-orange-600 hover:cursor-pointer text-white font-semibold px-6 py-3 rounded">
+              Shop Now!
+            </button>
+          </Link>
         </div>
 
         {/* Right Image */}

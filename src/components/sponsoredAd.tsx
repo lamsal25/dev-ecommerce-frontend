@@ -26,8 +26,8 @@ export default function SponsoredAdCarousel() {
 
     const [sliderRef, sliderInstance] = useKeenSlider<HTMLDivElement>({
         loop: true,
-        slides: { 
-            perView: 1, 
+        slides: {
+            perView: 1,
             spacing: 16
         },
         mode: "snap",
@@ -45,12 +45,12 @@ export default function SponsoredAdCarousel() {
             if (animationFrameRef.current) {
                 cancelAnimationFrame(animationFrameRef.current)
             }
-            
+
             const animate = () => {
                 instance.container.style.scrollBehavior = 'smooth'
                 animationFrameRef.current = null
             }
-            
+
             animationFrameRef.current = requestAnimationFrame(animate)
         },
         breakpoints: {
@@ -140,14 +140,14 @@ export default function SponsoredAdCarousel() {
         title: "Enhance Your Music Experience",
         description: "Discover premium audio equipment that brings your music to life with crystal clear sound quality and immersive bass.",
         image: "/headphone.png", // Replace with your default image path
-        link: "/products",
+        link: "/viewAllProduct",
         ctaText: "Shop Now"
     }
 
     // Empty state with attractive default content
     if (!ads.length && !isLoading) {
         return (
-            <section 
+            <section
                 className="w-full bg-primary py-12 px-4 sm:px-6 relative overflow-hidden"
                 ref={containerRef}
             >
@@ -179,7 +179,7 @@ export default function SponsoredAdCarousel() {
                             </a>
                         </div>
                     </div>
-                    
+
                     {/* Default Image */}
                     <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 flex-shrink-0 group">
                         <div className="absolute inset-0 bg-blue-500/10 rounded-3xl transform rotate-6 scale-95 group-hover:rotate-3 group-hover:scale-100 transition-all duration-500"></div>
@@ -212,8 +212,8 @@ export default function SponsoredAdCarousel() {
             <div className="max-w-7xl mx-auto relative z-10">
                 <div ref={sliderRef} className="keen-slider">
                     {ads.map((ad) => (
-                        <div 
-                            key={ad.id} 
+                        <div
+                            key={ad.id}
                             className="keen-slider__slide flex flex-col-reverse lg:flex-row items-center justify-between gap-8 px-4 py-6"
                         >
                             {/* Content */}

@@ -34,7 +34,7 @@ const PaymentVerify = () => {
 
             if (res.data.success) {
               toast.success("Payment verified and order placed successfully!");
-              router.push("/esewasuccess"); // or any page you want
+              router.push("/esewaSuccess"); // or any page you want
             } else {
               toast.error(res.data.message || "Payment verification failed");
             }

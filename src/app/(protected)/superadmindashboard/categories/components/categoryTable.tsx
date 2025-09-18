@@ -54,10 +54,10 @@ export default function CategoryTable() {
         const category = row.original;
         const hasSubcategories = category.subcategories && category.subcategories.length > 0;
         const isExpanded = expandedCategories[category.id];
-        
+
         return (
-          <div className="flex items-center gap-2" style={{ paddingLeft: `${(category.parent ? 1 : 0) * 20}px` }}>
-            {hasSubcategories && (
+          <div className="flex items-center gap-2">
+            {hasSubcategories ? (
               <Button
                 variant="ghost"
                 size="icon"
@@ -73,9 +73,10 @@ export default function CategoryTable() {
                   <ChevronRight className="h-4 w-4" />
                 )}
               </Button>
+            ) : (
+              <div className="w-6" />
             )}
-            {!hasSubcategories && <div className="w-6" />}
-            <span>{category.name}</span>
+            <span>{category?.name ?? "Unnamed Category"}</span>
           </div>
         );
       },
@@ -84,7 +85,7 @@ export default function CategoryTable() {
       accessorKey: "image",
       header: "Image",
       cell: ({ row }) => {
-        const image = row.original.image;
+        const image = row.original?.image;
         return image ? (
           <img src={image} alt={row.original.name} className="w-12 h-12 object-cover rounded" />
         ) : (
@@ -96,7 +97,7 @@ export default function CategoryTable() {
       accessorKey: "parent",
       header: "Parent Category",
       cell: ({ row }) => {
-        return row.original.parent ? row.original.parent.name : "Top-level";
+        return row.original?.parent?.name ?? "Top-level";
       },
     },
     {
@@ -131,7 +132,7 @@ export default function CategoryTable() {
   ], [expandedCategories, toggleExpand, isDeleting]);
 
   const flattenedData = useMemo(() => {
-    return flattenCategories(data, expandedCategories);
+    return flattenCategories(data ?? [], expandedCategories);
   }, [data, expandedCategories]);
 
   const table = useReactTable({
@@ -144,10 +145,11 @@ export default function CategoryTable() {
     try {
       setLoading(true);
       const response = await getActiveCategories();
-      setData(response.data);
+      setData(Array.isArray(response?.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching categories:', error);
       toast.error('Failed to load categories');
+      setData([]); // fallback to empty
     } finally {
       setLoading(false);
     }
@@ -218,7 +220,7 @@ export default function CategoryTable() {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={table.getAllLeafColumns().length} className="h-24 text-center">
                 No categories found.
               </TableCell>
             </TableRow>
@@ -228,7 +230,7 @@ export default function CategoryTable() {
 
       {editingCategory && (
         <EditCategory
-          category={editingCategory} 
+          category={editingCategory}
           isOpen={isEditModalOpen}
           setIsOpen={(isOpen) => {
             setIsEditModalOpen(isOpen);

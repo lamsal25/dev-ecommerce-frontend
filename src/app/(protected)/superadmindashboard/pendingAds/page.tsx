@@ -30,14 +30,15 @@ import { getPendingAds } from '../../actions/advertisement'
 type Advertisement = {
   id: number
   title: string
-  image: string
-  link: string
-  position: string
-  startDate: string
-  endDate: string
-  isActive: boolean
-  paymentDone: boolean
-  vendor: number
+  image?: string | null
+  link?: string | null
+  position?: string | null
+  startDate?: string | null
+  endDate?: string | null
+  isActive?: boolean
+  paymentDone?: boolean | null
+  vendor?: number | { id: number; name?: string } | null
+  vendorName?: string | null
 }
 
 export default function PendingAdsTable() {
@@ -49,15 +50,19 @@ export default function PendingAdsTable() {
   const fetchAds = async () => {
     setLoading(true)
     try {
-      const res = await getPendingAds();
-      setAds(res.data)
-      console.log(res.data)
+      const res = await getPendingAds()
+      // ensure data is always an array (avoid passing null to table)
+      const data = Array.isArray(res?.data) ? res.data : []
+      setAds(data)
+      console.log(data)
     } catch (err) {
       toast.error('Failed to load pending advertisements.')
+      setAds([]) // fallback
     } finally {
       setLoading(false)
     }
   }
+
   useEffect(() => {
     fetchAds()
   }, [])
@@ -103,63 +108,86 @@ export default function PendingAdsTable() {
       accessorKey: "title",
       header: "Title",
       cell: ({ row }) => (
-        <div className="font-medium">{row.getValue("title")}</div>
+        <div className="font-medium">{String(row.getValue("title") ?? "—")}</div>
       ),
     },
     {
       accessorKey: "image",
       header: "Image",
-      cell: ({ row }) => (
-        <div className="w-20 h-12 overflow-hidden rounded">
-          <img
-            src={row.getValue("image")}
-            alt="Ad"
-            className="object-cover w-full h-full"
-          />
-        </div>
-      ),
+      cell: ({ row }) => {
+        const img = row.getValue("image")
+        if (!img) {
+          return (
+            <div className="w-20 h-12 bg-gray-100 flex items-center justify-center text-xs text-gray-500 rounded">
+              No image
+            </div>
+          )
+        }
+        return (
+          <div className="w-20 h-12 overflow-hidden rounded">
+            <img
+              src={String(img)}
+              alt="Ad"
+              className="object-cover w-full h-full"
+            />
+          </div>
+        )
+      },
     },
     {
       accessorKey: "link",
       header: "Link",
-      cell: ({ row }) => (
-        <a href={row.getValue("link")} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
-          Visit
-        </a>
-      ),
+      cell: ({ row }) => {
+        const link = row.getValue("link")
+        if (!link) return <div className="text-sm text-gray-500">—</div>
+        return (
+          <a href={String(link)} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
+            Visit
+          </a>
+        )
+      },
     },
     {
-      accessorKey: "vendorName",
+      id: "vendorName",
       header: "Vendor Name",
-      cell: ({ row }) => (
-        <div>{row.getValue("vendorName")}</div>
-      ),
+      cell: ({ row }) => {
+        const orig = row.original as any
+        const vendorName = orig?.vendorName ?? orig?.vendor?.name ?? "—"
+        return <div>{vendorName}</div>
+      },
     },
     {
       accessorKey: "position",
       header: "Position",
+      cell: ({ row }) => String(row.getValue("position") ?? "—"),
     },
     {
       accessorKey: "startDate",
       header: "Start Date",
-      cell: ({ row }) => new Date(row.getValue("startDate")).toLocaleDateString(),
+      cell: ({ row }) => {
+        const v = row.getValue("startDate")
+        return v ? new Date(String(v)).toLocaleDateString() : "—"
+      },
     },
     {
       accessorKey: "endDate",
       header: "End Date",
-      cell: ({ row }) => new Date(row.getValue("endDate")).toLocaleDateString(),
+      cell: ({ row }) => {
+        const v = row.getValue("endDate")
+        return v ? new Date(String(v)).toLocaleDateString() : "—"
+      },
     },
     {
       accessorKey: "paymentDone",
       header: "Payment",
       cell: ({ row }) => {
-        const ad = row.original;
+        const ad = row.original
 
         // If payment is done, show 'Completed'
         if (ad.paymentDone) {
           return (
             <span className="text-green-600 font-medium text-sm">Completed</span>
-          );
+          )
         }
 
         return (
@@ -173,7 +201,7 @@ export default function PendingAdsTable() {
               Mark Received
             </Button>
           </div>
-        );
+        )
       },
     },
 
@@ -204,7 +232,7 @@ export default function PendingAdsTable() {
   ]
 
   const table = useReactTable({
-    data: ads,
+    data: ads ?? [], // defensive: always pass an array
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -231,6 +259,8 @@ export default function PendingAdsTable() {
     )
   }
 
+  const visibleHeaderCount = table.getHeaderGroups()[0]?.headers.length ?? columns.length
+
   return (
     <div className="w-full">
       <h2 className="text-3xl text-primary my-6 font-medium">
@@ -241,7 +271,7 @@ export default function PendingAdsTable() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter ads by title..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          value={String(table.getColumn("title")?.getFilterValue() ?? "")}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
@@ -276,8 +306,8 @@ export default function PendingAdsTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No pending ads found.
+                <TableCell colSpan={visibleHeaderCount} className="h-24 text-center">
+                  No pending ads currently.
                 </TableCell>
               </TableRow>
             )}

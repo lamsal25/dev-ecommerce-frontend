@@ -258,8 +258,6 @@ export default function ProductDetail() {
       <nav className="mb-6 text-sm flex items-center text-gray-500">
         <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link>
         <ChevronRight className="mx-2 w-4 h-4" />
-        <Link href="/products" className="hover:text-orange-500 transition-colors">Products</Link>
-        <ChevronRight className="mx-2 w-4 h-4" />
         <span className="text-gray-800 font-medium truncate max-w-[200px]">{product.name}</span>
       </nav>
 

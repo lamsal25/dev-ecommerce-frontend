@@ -1,3 +1,4 @@
+import Link from "next/link"
 import AdRequestForm from "./components/adRequestForm"
 
 export default function AdRequestPage() {
@@ -106,10 +107,10 @@ export default function AdRequestPage() {
                   "Our sales increased by 40% after running ads on this platform. The targeting options and analytics helped us optimize our campaign for maximum ROI."
                 </p>
                 <footer className="flex items-center">
-                  <img 
-                    className="h-10 w-10 rounded-full mr-3" 
-                    src="https://randomuser.me/api/portraits/women/42.jpg" 
-                    alt="Sarah Johnson" 
+                  <img
+                    className="h-10 w-10 rounded-full mr-3"
+                    src="https://randomuser.me/api/portraits/women/42.jpg"
+                    alt="Sarah Johnson"
                   />
                   <div>
                     <p className="text-gray-900 font-medium">Sarah Johnson</p>
@@ -158,9 +159,11 @@ export default function AdRequestPage() {
           <p className="max-w-2xl mx-auto mb-6">
             Our advertising specialists can help you create an effective campaign tailored to your business goals.
           </p>
-          <button className="bg-secondary px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors">
-            Contact Our Ad Team
-          </button>
+          <Link href="/contact">
+            <button className="bg-secondary px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors">
+              Contact Our Ad Team
+            </button>
+          </Link>
         </div>
       </div>
     </div>

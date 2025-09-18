@@ -1,4 +1,3 @@
-// app/categories/page.tsx
 import { Suspense } from 'react';
 import { getActiveCategories } from '@/app/(protected)/actions/category';
 import { BenefitsOfChoosingUs } from '@/components/benefitsOfChoosingUS';
@@ -22,10 +21,16 @@ export default async function AllCategoriesPage() {
                 </div>
             </div>
 
-            {/* Dynamic Content with Suspense for performance optimization*/}
+            {/* Dynamic Content with Suspense for performance optimization */}
             <div className="container mx-auto px-4 py-12">
                 <Suspense fallback={<CategoriesSkeleton />}>
-                    <CategoriesList categories={categories.data} />
+                    {categories.data && categories.data.length > 0 ? (
+                        <CategoriesList categories={categories.data} />
+                    ) : (
+                        <p className="text-center text-red-500 text-lg">
+                            No categories found.
+                        </p>
+                    )}
                 </Suspense>
             </div>
 
@@ -34,5 +39,3 @@ export default async function AllCategoriesPage() {
         </div>
     );
 }
-
-
